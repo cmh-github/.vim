@@ -1,11 +1,7 @@
 "colorscheme ir_black
 "colorscheme gruvbox
 colorscheme torte
-"set encoding=utf-8
-"set nocompatible
-"set nu
-syntax on
 set t_Co=256
 "set nocp
 set guifont=Courier_New:h18
-"autocmd vimenter * NERDTree
+set cc=100

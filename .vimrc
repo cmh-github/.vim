@@ -43,6 +43,8 @@
     Plug 'godlygeek/tabular'
     "NerdTree
     Plug 'preservim/nerdtree'
+    "Vim airline
+    Plug 'vim-airline/vim-airline'
 
     " Initialize plugin system
     call plug#end()
@@ -91,31 +93,36 @@
 " Vim UI {
 	color gruvbox   	       		" load a colorscheme
 	set tabpagemax=15 				" only show 15 tabs
-	set showmode                   	" display the current mode
+    " disable showmode because of using vim-airline
+	set noshowmode                   	" display the current mode
 
 	set cursorline  				" highlight current line
 	hi cursorline guibg=#333333 	" highlight bg color of current line
 	hi CursorColumn guibg=#333333   " highlight cursor
 
-	if has('cmdline_info')
-		set ruler                  	" show the ruler
-		set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
-		set showcmd                	" show partial commands in status line and
+" Cmdline info {
+	"if has('cmdline_info')
+		"set ruler                  	" show the ruler
+		"set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
+		"set showcmd                	" show partial commands in status line and
 									" selected characters/lines in visual mode
-	endif
+	"endif
+" }
 
-	if has('statusline')
-        set laststatus=2
+" Status line {
+	"if has('statusline')
+        "set laststatus=2
 
 		" Broken down into easily includeable segments
-		set statusline=%<%f\    " Filename
-		set statusline+=%w%h%m%r " Options
+		"set statusline=%<%f\    " Filename
+		"set statusline+=%w%h%m%r " Options
 		"set statusline+=%{fugitive#statusline()} "  Git Hotness
-		set statusline+=\ [%{&ff}/%Y]            " filetype
-		set statusline+=\ [%{getcwd()}]          " current dir
-		"set statusline+=\ [A=\%03.3b/H=\%02.2B] " ASCII / Hexadecimal value of char
-		set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
-	endif
+		"set statusline+=\ [%{&ff}/%Y]            " filetype
+		"set statusline+=\ [%{getcwd()}]          " current dir
+		""set statusline+=\ [A=\%03.3b/H=\%02.2B] " ASCII / Hexadecimal value of char
+		"set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+	"endif
+" }
 
 	set backspace=indent,eol,start	" backspace for dummys
 	set linespace=0					" No extra spaces between rows
