@@ -1,17 +1,13 @@
 " Modeline and Notes {
 " vim: set foldmarker={,} foldlevel=0 foldmethod=marker spell:
 "
-"	This is the personal .vimrc file of Steve Francia.
-"	While much of it is beneficial for general use, I would
-"	recommend picking out the parts you want and understand.
-"
-"	You can find me at http://spf13.com
+"	Personal vimrc by Steve Francia from http://spf13.com
+"	Modified by CMH
 " }
 
 " Environment {
 	" Basics {
 		set nocompatible 		" must be first line
-		set background=dark     " Assume a dark background
 	" }
 
 	" Windows Compatible {
@@ -20,13 +16,6 @@
 		if has('win32') || has('win64')
 		  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 		endif
-	" }
-    " 
-	" Setup Bundle Support {
-	" The next two lines ensure that the ~/.vim/bundle/ system works
-		"runtime! autoload/pathogen.vim
-		"silent! call pathogen#helptags()
-		"silent! call pathogen#runtime_append_all_bundles()
 	" }
 
 " }
@@ -100,30 +89,6 @@
 	hi cursorline guibg=#333333 	" highlight bg color of current line
 	hi CursorColumn guibg=#333333   " highlight cursor
 
-" Cmdline info {
-	"if has('cmdline_info')
-		"set ruler                  	" show the ruler
-		"set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
-		"set showcmd                	" show partial commands in status line and
-									" selected characters/lines in visual mode
-	"endif
-" }
-
-" Status line {
-	"if has('statusline')
-        "set laststatus=2
-
-		" Broken down into easily includeable segments
-		"set statusline=%<%f\    " Filename
-		"set statusline+=%w%h%m%r " Options
-		"set statusline+=%{fugitive#statusline()} "  Git Hotness
-		"set statusline+=\ [%{&ff}/%Y]            " filetype
-		"set statusline+=\ [%{getcwd()}]          " current dir
-		""set statusline+=\ [A=\%03.3b/H=\%02.2B] " ASCII / Hexadecimal value of char
-		"set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
-	"endif
-" }
-
 	set backspace=indent,eol,start	" backspace for dummys
 	set linespace=0					" No extra spaces between rows
 	set nu							" Line numbers on
@@ -142,7 +107,6 @@
 	"set gdefault					" the /g flag on :s substitutions by default
     set list
     set listchars=tab:>.,trail:.,extends:#,nbsp:. " Highlight problematic whitespace
-
 
 " }
 
@@ -180,19 +144,6 @@
     " Wrapped lines goes down/up to next row, rather than next line in file.
     nnoremap j gj
     nnoremap k gk
-
-	" The following two lines conflict with moving to top and bottom of the
-	" screen
-	" If you prefer that functionality, comment them out.
-	"map <S-H> gT          
-	"map <S-L> gt
-
-	" Stupid shift key fixes
-	"cmap W w 						
-	"cmap WQ wq
-	"cmap wQ wq
-	"cmap Q q
-	"cmap Tabe tabe
 
 	" Yank from the cursor to the end of the line, to be consistent with C and D.
 	nnoremap Y y$
@@ -352,35 +303,7 @@
 		" Shortcut for reloading snippets, useful when developing
 		nnoremap ,smr <esc>:exec ReloadAllSnippets()<cr>
 	" }
-
-	" NerdTree {
-		map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
-		map <leader>e :NERDTreeFind<CR>
-		nmap <leader>nt :NERDTreeFind<CR>
-
-		let NERDTreeShowBookmarks=1
-		let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
-		let NERDTreeChDirMode=0
-		let NERDTreeQuitOnOpen=1
-		let NERDTreeShowHidden=1
-		let NERDTreeKeepTreeInNewTab=1
-	" }
     
-    " Tabularize {
-        if exists(":Tabularize")
-          nmap <Leader>a= :Tabularize /=<CR>
-          vmap <Leader>a= :Tabularize /=<CR>
-          nmap <Leader>a: :Tabularize /:<CR>
-          vmap <Leader>a: :Tabularize /:<CR>
-          nmap <Leader>a:: :Tabularize /:\zs<CR>
-          vmap <Leader>a:: :Tabularize /:\zs<CR>
-          nmap <Leader>a, :Tabularize /,<CR>
-          vmap <Leader>a, :Tabularize /,<CR>
-          nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-          vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-        endif
-     " }
-
 
 	" Richard's plugins {
 		" Fuzzy Finder {
@@ -436,7 +359,6 @@
 			let Tlist_Highlight_Tag_On_BufEnter = 1
 			let Tlist_Use_Right_Window = 1
 			let Tlist_Use_SingleClick = 1
-
 			let g:ctags_statusline=1
 			" Override how taglist does javascript
 			let g:tlist_javascript_settings = 'javascript;f:function;c:class;m:method;p:property;v:global'
@@ -485,18 +407,6 @@ function! InitializeDirectories()
   endfor
 endfunction
 call InitializeDirectories() 
-
-function! NERDTreeInitAsNeeded()
-    redir => bufoutput
-    buffers!
-    redir END
-    let idx = stridx(bufoutput, "NERD_tree")
-    if idx > -1
-        NERDTreeMirror
-        NERDTreeFind
-        wincmd l
-    endif
-endfunction
 
 " Use local vimrc if available {
     if filereadable(expand("~/.vimrc.local"))
