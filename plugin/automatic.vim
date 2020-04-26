@@ -1531,7 +1531,7 @@ function s:GetInstFileName(inst) "{{{2
 		for line in lines
 			if line =~ '^' . '\<' . a:inst . '\>'
 				let line = substitute(line, '^\w\+\t', "", "")
-				let inst_file = substitute(line, '\.v.*$', '.v', "")
+				let inst_file = substitute(line, '\.\([v|sv]\).*$', '.\1', "")
 				if filereadable(inst_file)
 					let file_readable = 1
 				endif
@@ -1540,7 +1540,7 @@ function s:GetInstFileName(inst) "{{{2
 		endfor
     endif
     if file_readable == 0
-        let inst_file = findfile(a:inst . ".v", "./")
+        let inst_file = findfile(a:inst . ".sv", "./")
         if filereadable(inst_file)
             call system("ctags -a " . inst_file)
             call system("sed -i '/[prn]$/d' tags")
@@ -2865,7 +2865,7 @@ endfunction "}}}2
 
 function s:GetPortMaxLen(signals) "{{{2
 	let max_len = []
-	let prefix_max_len = s:autoinst_prefix_max_len
+	let prefix_max_len = 0
 	let suffix_max_len = s:autoinst_suffix_max_len
 	for seq in keys(a:signals)
 		let value = a:signals[seq]
@@ -3227,17 +3227,17 @@ function AutoInst(kill_all) "{{{2
                     endif
 
                     let prefix_margin = s:CalMargin(prefix_max_len, len(sig))
-                    let tmp_line = '    .' . sig . prefix_margin .'(' . sig
-                    if width != 'c0'
-                        let suffix_margin = s:CalMargin(suffix_max_len, len(sig)+len(width)+4)
-                        let tmp_line = tmp_line . "[" . width . ":0]"
-                    else
-                        let suffix_margin = s:CalMargin(suffix_max_len, len(sig))
-                    endif
+                    let tmp_line = '  .' . sig . prefix_margin .'(' . sig
+                    "if width != 'c0'
+                        "let suffix_margin = s:CalMargin(suffix_max_len, len(sig)+len(width)+4)
+                        "let tmp_line = tmp_line . "[" . width . ":0]"
+                    "else
+                        "let suffix_margin = s:CalMargin(suffix_max_len, len(sig))
+                    "endif
                     if value[7] == 1
-                        let tmp_line = tmp_line . suffix_margin . ')  // ' . io_dir
+                        let tmp_line = tmp_line . ')'
                     else
-                        let tmp_line = tmp_line . suffix_margin . '), // ' . io_dir
+                        let tmp_line = tmp_line . '),'
                     endif
                     call add(aft_inst, tmp_line)
                 endfor
