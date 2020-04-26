@@ -4,4 +4,5 @@ colorscheme torte
 set t_Co=256
 "set nocp
 set guifont=Courier_New:h18
+set guifont=Monospace\ 18
 set cc=100
