@@ -113,6 +113,7 @@ let s:VlogTypePort = s:VlogTypePort . '\<inout\>'
 
 let s:VlogTypeData =                  '\<wire\>\|'
 let s:VlogTypeData = s:VlogTypeData . '\<reg\>\|'
+let s:VlogTypeData = s:VlogTypeData . '\<logic\>\|'
 let s:VlogTypeData = s:VlogTypeData . '\<parameter\>\|'
 let s:VlogTypeData = s:VlogTypeData . '\<localparam\>\|'
 let s:VlogTypeData = s:VlogTypeData . '\<genvar\>\|'
@@ -2006,6 +2007,10 @@ function s:ExtendIoFromLine(dict,in_line,init_seq) "{{{2
 	let seq = ''
 	let line0 = ''
 
+    " systemverilog input is default to logic type
+    if io_dir =~ 'input'
+        let has_defined = 1
+    endif
 	if line =~ '^\<wire\>'
 		let has_defined = 1
 		let line = substitute(line,'^\<wire\>\s*','','')
@@ -2014,6 +2019,16 @@ function s:ExtendIoFromLine(dict,in_line,init_seq) "{{{2
 		let has_defined = 1
 		let type = 'io_reg'
 		let line = substitute(line,'^\<reg\>\s*','','')
+	endif
+	if line =~ '^\<logic\>'
+		let has_defined = 1
+		let type = 'io_logic'
+		let line = substitute(line,'^\<logic\>\s*','','')
+	endif
+	if line =~ '^\(\w\+::\)\=t_'
+		let has_defined = 1
+		let type = 'io_struct'
+		let line = substitute(line,'^\S\+\s\+','','')
 	endif
 
 	if line =~ '^\['
@@ -2052,7 +2067,7 @@ function s:ExtendIoFromLine2(dict,in_line,init_seq) "{{{2
 	let has_defined = 0
 	let seq = ''
 	let line0 = ''
-
+    let usr_struct = ''
 	if line =~ '^\<wire\>'
 		let has_defined = 1
 		let line = substitute(line,'^\<wire\>\s*','','')
@@ -2062,6 +2077,17 @@ function s:ExtendIoFromLine2(dict,in_line,init_seq) "{{{2
 		let type = 'io_reg'
 		let line = substitute(line,'^\<reg\>\s*','','')
 	endif
+	if line =~ '^\<logic\>'
+		let has_defined = 1
+		let type = 'io_logic'
+		let line = substitute(line,'^\<logic\>\s*','','')
+	endif
+	if line =~ '^:\=t_'
+		let has_defined = 1
+		let type = 'io_struct'
+		let line = substitute(line,'^\S\+\s+','','')
+	endif
+
 
 	if line =~ '^\['
 		let width = matchstr(line,'^\[.*:')
@@ -2457,6 +2483,7 @@ function s:GetAllSignals(alldefs,allparas) "{{{2
 			break
 		else
 			while 1
+                " (TODO) check how to resovle xx_pkg::abc
 				let signal = matchstr(line,"[`\.']\\?\\w\\+")
 				if signal == ''
 					break
@@ -2762,7 +2789,7 @@ function s:UpdateDefine(unresolved,link_dict,signals) "{{{2
 		for sig in keys(a:signals)
 			let value = a:signals[sig]
 			"echo "all:  sig:" . sig . " width: " . value[0] . "  " value[1] . "  " . value[2] . "  " . value[3] . "  " . value[4]
-			if value[1] == 'io_wire' || value[1] == 'io_reg' || value[1] == 'usrdef' || value[1] == 'inst_wire'
+			if value[1] == 'io_wire' || value[1] == 'io_reg' || value[1] == 'usrdef' || value[1] == 'inst_wire' || value[1] == 'io_logic' || value[1] == 'io_struct'
 				call remove(a:unresolved,sig)
 			elseif value[1] == 'freg' || value[1] == 'creg' || value[1] == 'wire'
 				"echo "will remove:  sig:" . sig . " width: " . value[0] . "  " value[1] . "  " . value[2] . "  " . value[3] . "  " . value[4]
@@ -2785,7 +2812,7 @@ function s:DivSignals(signals,io_wire,usr_def,ff_reg,comb_reg,wire,inst_wire) "{
 		let seq = value[3]
 		let line = value[4]
 
-		if type == 'io_wire' || type == 'io_reg'
+		if type == 'io_wire' || type == 'io_reg' || type == 'io_logic'
 			if has_defined == 0
 				let value[5] = sig
 				call extend(a:io_wire,{seq : value})
@@ -4176,7 +4203,6 @@ function AutoDef() "{{{2
 	let wire = {}
 	let inst_wire = {}
 	let max_len = s:DivSignals(signals,io_wire,usr_def,ff_reg,comb_reg,wire,inst_wire)
-
 	"update current buffer
 	for line in getline(1, line("$"))
 		if line =~ '^\s*/\*\<\(autodef\|AUTODEF\)\>\*/'
@@ -4184,11 +4210,12 @@ function AutoDef() "{{{2
 			call add(aft_def, "// Define io wire here")
 			for io in sort(keys(io_wire))
 				let value = io_wire[io]
-				if value[1] == 'io_wire'
-					let line = 'wire '
-				else
-					let line = 'reg  '
-				endif
+                let line = 'logic '
+				"if value[1] == 'io_wire'
+					"let line = 'wire '
+				"else
+					"let line = 'reg  '
+				"endif
                 let line = line . s:CalMargin(12,len(line))
 				if value[0] != "c0"
 					let line = line . '[' . value[0] . ':0]'
@@ -4236,7 +4263,7 @@ function AutoDef() "{{{2
 			call add(aft_def, "// Define inst wires here")
 			for wires in sort(keys(inst_wire))
 				let value = inst_wire[wires]
-				let line = 'wire '
+				let line = 'logic '
                 let line = line . s:CalMargin(12,len(line))
 				if value[0] != "c0"
 					let line = line . '[' . value[0] . ':0]'
