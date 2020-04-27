@@ -2914,7 +2914,7 @@ function s:GetPortMaxLen(signals) "{{{2
 		let line = value[4]
         let sig = value[5]
 
-		if type == 'io_wire' || type == 'io_reg' || type == 'keep'
+		if type == 'io_wire' || type == 'io_reg' || type == 'keep' || type == 'io_logic'
 			let port_len = len(sig)
 			let wire_len = len(sig)
 
@@ -3260,7 +3260,6 @@ function AutoInst(kill_all) "{{{2
                         endif
                         continue
                     endif
-
                     let prefix_margin = s:CalMargin(prefix_max_len, len(sig))
                     let tmp_line = '  .' . sig . prefix_margin .'(' . sig
                     "if width != 'c0'
@@ -3390,7 +3389,6 @@ function AutoInstUpdate(kill_all) "{{{2
                     let sig = value[5]
                     let io_dir = value[6]
                     let io_dir = substitute(io_dir, '\(input\|inout\)', '\1 ', '')
-
                     let prefix_margin = s:CalMargin(prefix_max_len, len(sig))
                     let tmp_line = '    .' . sig . prefix_margin .'(' . sig
                     if width != 'c0'
