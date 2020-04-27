@@ -1,8 +1,10 @@
+autocmd BufWritePre * %s/\s\+$//e
+autocmd BufRead,BufNewFile,BufReadPost *.svp,*.sv,*.vh,*.svh set syntax=systemverilog
 "colorscheme ir_black
 "colorscheme gruvbox
 colorscheme torte
 set t_Co=256
 "set nocp
 set guifont=Courier_New:h18
-set guifont=Monospace\ 18
+set guifont=Monospace\ 12
 set cc=100
