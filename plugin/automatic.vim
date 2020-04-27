@@ -185,11 +185,12 @@ amenu &TimingWave.AddBlk                                                :call Ad
 amenu &TimingWave.-Operation-                                           :
 amenu &TimingWave.Invert<TAB><C-F8>                                     :call Invert()<CR>
 
-amenu &AlwaysBlock.always\ @(posedge\ or\ negedge)                      :call AlBpn()<CR>
-amenu &AlwaysBlock.always\ @(*)                                         :call AlB()<CR>
-amenu &AlwaysBlock.always\ @(negedge\ or\ negedge)                      :call AlBnn()<CR>
-amenu &AlwaysBlock.always\ @(posedge)                                   :call AlBp()<CR>
-amenu &AlwaysBlock.always\ @(negedge)                                   :call AlBn()<CR>
+amenu &AlwaysBlock.always_ff\ @(posedge\ or\ negedge)                   :call AlBpn()<CR>
+amenu &AlwaysBlock.always_comb                                          :call AlB()<CR>
+" (TODO) It seems the functions below are not needed
+"amenu &AlwaysBlock.always\ @(negedge\ or\ negedge)                      :call AlBnn()<CR>
+"amenu &AlwaysBlock.always\ @(posedge)                                   :call AlBp()<CR>
+"amenu &AlwaysBlock.always\ @(negedge)                                   :call AlBn()<CR>
 
 "  null     b
 "  )        b
@@ -274,8 +275,8 @@ tmenu ToolBar.AddSig     AddSig
 tmenu ToolBar.AddBus     AddBus
 tmenu ToolBar.AddNeg     AddNeg
 tmenu ToolBar.AddBlk     AddSep line
-tmenu ToolBar.alpn       always @(posedge clk or negedge rst_n)
-tmenu ToolBar.al         always @(*)
+tmenu ToolBar.alpn       always_ff @(posedge clk or negedge rst_n)
+tmenu ToolBar.al         always_comb
 tmenu ToolBar.alnn       always @(negedge clk or negedge rst_n)
 
 "}}}1
@@ -834,12 +835,12 @@ function AlBpn() "{{{2
     for idx in range(1,7)
         call append(lnum,"")
     endfor
-    call setline(lnum+1,"always @(posedge clk or negedge rst_n) begin")
-    call setline(lnum+2,"    if(!rst_n) begin")
-    call setline(lnum+3,"        ")
-    call setline(lnum+4,"    end else if() begin")
-    call setline(lnum+5,"    end else begin")
-    call setline(lnum+6,"    end")
+    call setline(lnum+1,"always_ff @(posedge clk or negedge rst_n) begin")
+    call setline(lnum+2,"  if(!rst_n) begin")
+    call setline(lnum+3,"      ")
+    call setline(lnum+4,"  end else if() begin")
+    call setline(lnum+5,"  end else begin")
+    call setline(lnum+6,"  end")
     call setline(lnum+7,"end")
     call cursor(lnum+3,9)
 endfunction "}}}2
@@ -849,7 +850,7 @@ function AlB() "{{{2
     for idx in range(1,3)
         call append(lnum,"")
     endfor
-    call setline(lnum+1,"always @(*) begin")
+    call setline(lnum+1,"always_comb begin")
     call setline(lnum+2,"    ")
     call setline(lnum+3,"end")
     call cursor(lnum+2,5)
