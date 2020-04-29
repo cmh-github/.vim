@@ -19,12 +19,12 @@
 "		[width,type,has_defined,seq,line,signal_name,io_dir,last_port]
 "	}
 "	width       : is the result -1 by number or define or parameter; if no define, set to ''
-"	type        : is io_wire,io_reg,usrdef,inst_wire,freg,creg,wire; 
+"	type        : is io_wire,io_reg,usrdef,inst_wire,freg,creg,wire;
 "	                if no define, set to ''
 "		            if type is io, default value is io_wire, and will update to io_reg if it use in always block
 "		            if type is 'keep', rev for `ifdef `ifndef ...
 "	has_defined : only use for io, default value set to 0
-"	seq         : normal value is 0 - n, only for io & usrdefine, keep define sequence number not change; if no use, set to -1 
+"	seq         : normal value is 0 - n, only for io & usrdefine, keep define sequence number not change; if no use, set to -1
 "	line        : it is the define line contents, only use for usrdefine; if no use, set to ''
 "	signal_name : signal net name
 "	io_dir      : if signal is io net, show io_dir, input / output / inout
@@ -197,7 +197,7 @@ amenu &AlwaysBlock.always_comb                                          :call Al
 "  a        b
 "           b null
 "           b (
-"  ==========================================                                         ^       null  or )   or a             b          null  or ( 
+"  ==========================================                                         ^       null  or )   or a             b          null  or (
 "amenu &Search.instance\ -\ up<TAB><C-F1>                                :call search('^\s*'.'\(\\|.*)\s\+\\|\w\+\s\+\)'.'\(\w\+\)'.'\(\s*$\\|\s*(\)','be')<CR>
 "amenu &Search.instance\ -\ down<TAB><C-F2>                              :call search('^\s*'.'\(\\|.*)\s\+\\|\w\+\s\+\)'.'\(\w\+\)'.'\(\s*$\\|\s*(\)','e')<CR>
 
@@ -329,7 +329,7 @@ function SearchInstance(backward)
 "  a        b
 "           b null
 "           b (
-"  ================  ^    null or )     or           a                              b              null  or //.*$  or ( 
+"  ================  ^    null or )     or           a                              b              null  or //.*$  or (
         execute "normal 0"
         call search('^\s*'.'\(\|.*)\s\+\|'.s:not_keywords_pattern.'\s\+\)'.s:not_keywords_pattern.'\(\s*$\|\s*\/\/.*$\|\s*(\)','be')
        "call search('^\s*'.'\(\|.*)\s\+\|'.s:not_keywords_pattern.'\s\+\)'.s:not_keywords_pattern.'\(\s*$\|\s*(\)','be')
@@ -682,7 +682,7 @@ function Invert() "{{{2
 			let res_bot = res_bot . bot_char
 		endfor
 
-		if next == cur 
+		if next == cur
 			let init_top_char = '+'
 			let init_mid_char = '|'
 			let init_bot_char = '+'
@@ -722,7 +722,7 @@ function s:GetUserName() "{{{2
     if a:user =~ 'USER_DIT:'
         let a:user = $USER
     endif
-    return a:user 
+    return a:user
 endfunction "}}}2
 
 function AddHeader() "{{{2
@@ -836,10 +836,10 @@ function AlBpn() "{{{2
         call append(lnum,"")
     endfor
     call setline(lnum+1,"always_ff @(posedge clk or negedge rst_n) begin")
-    call setline(lnum+2,"  if(!rst_n) begin")
-    call setline(lnum+3,"      ")
-    call setline(lnum+4,"  end else if() begin")
-    call setline(lnum+5,"  end else begin")
+    call setline(lnum+2,"  if (!rst_n) begin")
+    call setline(lnum+3,"    xxx <= '0;  ")
+    call setline(lnum+4,"  end else if (xxx_le) begin")
+    call setline(lnum+5,"    xxx <= xxx_next;")
     call setline(lnum+6,"  end")
     call setline(lnum+7,"end")
     call cursor(lnum+3,9)
@@ -1322,7 +1322,7 @@ function s:ShowInstWrapper(mode,lnum,word) "{{{2
 			if in_inst
 				"echohl WarningMsg | echo prefix . line . '//' . s:GetInstPortDir(inst,s:GetPortName(line)) . ' <- cursor line' | echohl None
                 call s:oTreeNode.TreeLog(prefix . line . '//' . s:GetInstPortDir(inst,s:GetPortName(line)) . ' <- cursor line')
-			else	
+			else
 				"echohl WarningMsg | echo prefix . line . ' <- cursor line' | echohl None
                 call s:oTreeNode.TreeLog(prefix . line . ' <- cursor line')
 			endif
@@ -1858,7 +1858,7 @@ endfunction "}}}2
 function s:GetSeqIO(lines, io_seq_dict) "{{{2
 " use for AutoInst, AutoDef
 " io_seq_dict type dict
-" key is seq 
+" key is seq
 	let line_index = 1
 	let io_seq = 0
     let tmp_dict = {}
@@ -2522,7 +2522,7 @@ endfunction "}}}2
 function s:GetAssignSide(side) "{{{2
 	"left side is signal name
 	"right side return signal width
-	
+
 	let result_side = []
 	"get left side
 	let left = a:side[0]
@@ -2966,7 +2966,7 @@ function KillAutoArg() "{{{2
    let line_index = 1
    let goto_lnum = -1
    let line = ""
-   while line_index <= line("$") 
+   while line_index <= line("$")
       let line = getline(line_index)
       "if line =~ '^\s*\<module\>\s\+\w\+\s*(/\*\<\(autoarg\|AUTOARG\)\>\*/'  " -- BUG.2017.09.16
       if line =~ '/\*\s*\<\(autoarg\|AUTOARG\)\>'
@@ -3205,7 +3205,7 @@ function AutoInst(kill_all) "{{{2
             if line =~ '--oneline'
                 let oneline_mode = 1
             endif
-			
+
 			let inst_io_seq = {}
 			"let io_wire = {}
 			let lines = readfile(inst_file)
@@ -4055,7 +4055,7 @@ function AutoDef() "{{{2
 					let line = substitute(line, '\<if\>\s*(.*)\s\+', "", "")
 					let line = substitute(line, '\<else\>\s\+', "", "")
 					"let line = substitute(line, '^\s*\S\+\s*:', "", "")
-                    
+
                     let ll = matchstr(line,'\w\+\s*\(\[.*\]\)\?\s*<=')
                     let ll = substitute(ll,'<=', "", "")
                     let rr = matchstr(line,'<=.*$')
@@ -4102,7 +4102,7 @@ function AutoDef() "{{{2
 					let line = substitute(line, '\<if\>\s*(.*)\s\+', "", "")
 					let line = substitute(line, '\<else\>\s\+', "", "")
 					"let line = substitute(line, '^\s*\S\+\s*:', "", "")
-                    
+
 					"let ll = matchstr(line,'\s*\w\+\s*=')
 					"let rr = substitute(line,'^.*=','','')
 					"let ll = substitute(ll,'=','','')
@@ -4392,7 +4392,7 @@ function s:oTreeNode.SearchChildNodeByLnum(tree,lnum) "{{{2
                 return node
             else
                 let tmp_node = self.SearchChildNodeByLnum(node,a:lnum)
-                if tmp_node.lnum == a:lnum 
+                if tmp_node.lnum == a:lnum
                     return tmp_node
                 endif
             endif
@@ -4774,7 +4774,7 @@ function s:setupTreeSyntaxHighlighting() "{{{2
     hi def link treeBookmark Statement
     hi def link treeUnresolved WarningMsg
     hi def link treeNull Directory
-    hi def link vlogMacro Macro 
+    hi def link vlogMacro Macro
 endfunction "}}}2
 function s:bindMappings() "{{{2
     nnoremap <buffer> <cr> :call <SID>active(1)<cr>
