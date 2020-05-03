@@ -1,4 +1,4 @@
-map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
+map <F7> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
 map <leader>e :NERDTreeFind<CR>
 nmap <leader>nt :NERDTreeFind<CR>
 

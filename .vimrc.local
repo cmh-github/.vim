@@ -1,5 +1,6 @@
 autocmd BufWritePre * %s/\s\+$//e
-autocmd BufRead,BufNewFile,BufReadPost *.svp,*.sv,*.vh,*.svh set syntax=systemverilog
+autocmd BufRead,BufNewFile,BufReadPost *.svp,*.sv,*.vh,*.svh set syntax=verilog_systemverilog
+au! BufNewFile,BufRead,BufReadPost *.v,*.vh,*.vp,*.sv,*.svi,*.svh,*.svp,*.sva setfiletype verilog_systemverilog
 "colorscheme ir_black
 "colorscheme gruvbox
 colorscheme torte

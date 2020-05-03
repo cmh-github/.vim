@@ -12,7 +12,7 @@
 
 	" Windows Compatible {
 		" On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
-		" across (heterogeneous) systems easier. 
+		" across (heterogeneous) systems easier.
 		if has('win32') || has('win64')
 		  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 		endif
@@ -34,7 +34,12 @@
     Plug 'preservim/nerdtree'
     "Vim airline
     Plug 'vim-airline/vim-airline'
-
+    "Ctrlp
+    Plug 'kien/ctrlp.vim'
+    " verilog systemverilog
+    Plug 'vhda/verilog_systemverilog.vim'
+    " Tagbar
+    Plug 'majutsushi/tagbar'
     " Initialize plugin system
     call plug#end()
 " }
@@ -59,7 +64,7 @@
 	set virtualedit=onemore 	   	" allow for cursor beyond last character
 	set history=1000  				" Store a ton of history (default is 20)
 	set spell 		 	        	" spell checking on
-	
+
 	" Setting up the directories {
 		set backup 						" backups are nice ...
 		set undofile					" so is persistent undo ...
@@ -69,7 +74,7 @@
 		"set backupdir=$HOME/.vimbackup//  " but not when they clog .
 		"set directory=$HOME/.vimswap// 	" Same for swap files
 		"set viewdir=$HOME/.vimviews// 	" same for view files
-		
+
 		"" Creating directories if they don't exist
 		"silent execute '!mkdir -p $HVOME/.vimbackup'
 		"silent execute '!mkdir -p $HOME/.vimswap'
@@ -95,7 +100,7 @@
 	set showmatch					" show matching brackets/parenthesis
 	set incsearch					" find as you type search
 	set hlsearch					" highlight search terms
-	set winminheight=0				" windows can be 0 line high 
+	set winminheight=0				" windows can be 0 line high
 	"set ignorecase					" case insensitive search
 	set smartcase					" case sensitive when uc present
 	set wildmenu					" show list instead of just completing
@@ -118,7 +123,7 @@
 	set expandtab 	  	     		" tabs are spaces, not tabs
 	set tabstop=4 					" an indentation every four columns
 	set softtabstop=4 				" let backspace delete indent
-	"set matchpairs+=<:>            	" match, to be used with % 
+	"set matchpairs+=<:>            	" match, to be used with %
 	set pastetoggle=<F12>          	" pastetoggle (sane indentation on pastes)
 	"set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 	" Remove trailing whitespaces and ^M chars
@@ -140,14 +145,14 @@
 	map <C-K> <C-W>k<C-W>_
 	map <C-L> <C-W>l<C-W>_
 	map <C-H> <C-W>h<C-W>_
-	
+
     " Wrapped lines goes down/up to next row, rather than next line in file.
     nnoremap j gj
     nnoremap k gk
 
 	" Yank from the cursor to the end of the line, to be consistent with C and D.
 	nnoremap Y y$
-		
+
 	""" Code folding options
 	nmap <leader>f0 :set foldlevel=0<CR>
 	nmap <leader>f1 :set foldlevel=1<CR>
@@ -170,7 +175,7 @@
 
 	" visual shifting (does not exit Visual mode)
 	vnoremap < <gv
-	vnoremap > >gv 
+	vnoremap > >gv
 
 	" Fix home and end keybindings for screen, particularly on mac
 	" - for some reason this fixes the arrow keys too. huh.
@@ -178,7 +183,7 @@
 	imap [F $
 	map [H g0
 	imap [H g0
-		
+
 	" For when you forget to sudo.. Really Write the file.
 	cmap w!! w !sudo tee % >/dev/null
 " }
@@ -188,19 +193,19 @@
 	" VCSCommand {
 "		let b:VCSCommandMapPrefix=',v'
 "		let b:VCSCommandVCSType='git'
-	" } 
-	
+	" }
+
 	" PIV {
 		let g:DisableAutoPHPFolding = 0
 		"let cfu=phpcomplete#CompletePHP
 	" }
-	
+
 	" Supertab {
 		let g:SuperTabDefaultCompletionType = "context"
 		let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
 	" }
 
-	" Misc { 
+	" Misc {
 		:map <C-F10> <Esc>:vsp<CR>:VTree<CR>
 		" map Control + F10 to Vtree
 
@@ -214,7 +219,7 @@
 
 		let b:match_ignorecase = 1
 	" }
-	
+
 	" ShowMarks {
 		let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		" Don't leave on by default, use :ShowMarksOn to enable
@@ -228,7 +233,7 @@
 		" For multiple marks on the same line.
 		highlight ShowMarksHLm gui=bold guibg=LightGreen guifg=DarkGreen
 	" }
-	
+
 	" Command-t {
         let g:CommandTSearchPath = $HOME . '/Code'
 	" }
@@ -251,7 +256,7 @@
 		hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
 		hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
 
-		" some convenient mappings 
+		" some convenient mappings
 		inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
 		inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
 		inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
@@ -261,21 +266,21 @@
 
         " and make sure that it doesn't break supertab
         let g:SuperTabCrMapping = 0
-        
+
 		" automatically open and close the popup menu / preview window
 		au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 		set completeopt=menu,preview,longest
 	" }
-	
+
 	" Ctags {
-    " This will look in the current directory for 'tags', and work up the tree towards root until one is found. 
+    " This will look in the current directory for 'tags', and work up the tree towards root until one is found.
 		set tags=./tags;/,$HOME/vimtags
         map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR> " C-\ - Open the definition in a new tab
         map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>      " A-] - Open the definition in a vertical split
 	" }
 
 	" EasyTags {
-       " Disabling for now. It doesn't work well on large tag files 
+       " Disabling for now. It doesn't work well on large tag files
         let g:loaded_easytags = 1  " Disable until it's working better
 		let g:easytags_cmd = 'ctags'
         let g:easytags_dynamic_files = 1
@@ -290,7 +295,7 @@
 		" If using html auto complete (complete closing tag)
         au FileType xml,html,xhtml let b:delimitMate_matchpairs = "(:),[:],{:}"
 	" }
-	
+
 	" AutoCloseTag {
 		" Make it so AutoCloseTag works for xml and xhtml files as well
 		au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
@@ -303,7 +308,7 @@
 		" Shortcut for reloading snippets, useful when developing
 		nnoremap ,smr <esc>:exec ReloadAllSnippets()<cr>
 	" }
-    
+
 
 	" Richard's plugins {
 		" Fuzzy Finder {
@@ -320,11 +325,11 @@
 			nmap <leader>sl :SessionList<CR>
 			nmap <leader>ss :SessionSave<CR>
 		" }
-		
+
 		" Buffer explorer {
 			nmap <leader>b :BufExplorer<CR>
 		" }
-		
+
 		" VCS commands {
 			nmap <leader>vs :VCSStatus<CR>
 			nmap <leader>vc :VCSCommit<CR>
@@ -338,7 +343,7 @@
 			nmap <leader>pd :call PhpDocSingle()<CR>
 			vmap <leader>pd :call PhpDocRange()<CR>
 		" }
-		
+
 		" Debugging with VimDebugger {
 			map <F11> :DbgStepInto<CR>
 			map <F10> :DbgStepOver<CR>
@@ -382,12 +387,12 @@
 
 function! InitializeDirectories()
   let separator = "."
-  let parent = $HOME 
+  let parent = $HOME
   let prefix = '.vim'
-  let dir_list = { 
-			  \ 'backup': 'backupdir', 
-			  \ 'views': 'viewdir', 
-			  \ 'swap': 'directory', 
+  let dir_list = {
+			  \ 'backup': 'backupdir',
+			  \ 'views': 'viewdir',
+			  \ 'swap': 'directory',
 			  \ 'undo': 'undodir' }
 
   for [dirname, settingname] in items(dir_list)
@@ -400,13 +405,13 @@ function! InitializeDirectories()
 	  if !isdirectory(directory)
 		  echo "Warning: Unable to create backup directory: " . directory
 		  echo "Try: mkdir -p " . directory
-	  else  
+	  else
           let directory = substitute(directory, " ", "\\\\ ", "")
           exec "set " . settingname . "=" . directory
 	  endif
   endfor
 endfunction
-call InitializeDirectories() 
+call InitializeDirectories()
 
 " Use local vimrc if available {
     if filereadable(expand("~/.vimrc.local"))
