@@ -2281,13 +2281,11 @@ function s:ExtendInstWireFromLine(dict,in_line,inst_io) "{{{2
 		return
 	endif
 	let inst_wire = matchstr(line,'\w\+')
-
 	let port_value = a:inst_io[inst_port]
 	let port_width = port_value[0]
-
 	"if port_width is parameter
 	if port_width !~ 'c0' && port_width =~ '[a-zA-Z]' && port_width !~ '\`'
-        let port_width = ''
+        "let port_width = ''
 		"return
 	endif
 
