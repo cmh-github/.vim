@@ -1,6 +1,6 @@
 autocmd BufWritePre * %s/\s\+$//e
-autocmd BufRead,BufNewFile,BufReadPost *.svp,*.sv,*.vh,*.svh set syntax=verilog_systemverilog
-au! BufNewFile,BufRead,BufReadPost *.v,*.vh,*.vp,*.sv,*.svi,*.svh,*.svp,*.sva setfiletype verilog_systemverilog
+autocmd BufRead,BufNewFile,BufReadPost **.v,*.vh,*.vp,*.sv,*.svi,*.svh,*.svp,*.sva set syntax=verilog_systemverilog
+"au! BufNewFile,BufRead,BufReadPost *.v,*.vh,*.vp,*.sv,*.svi,*.svh,*.svp,*.sva setfiletype verilog_systemverilog
 "colorscheme ir_black
 "colorscheme gruvbox
 colorscheme torte
@@ -9,3 +9,9 @@ set t_Co=256
 set guifont=Courier_New:h18
 set guifont=Monospace\ 12
 set cc=100
+"remove auto commenting
+"set formatoptions -=ro
+autocmd BufNewFile,BufRead * setlocal formatoptions-=r
+"indent disable of verilog_systemverilog
+autocmd filetype verilog_systemverilog let g:verilog_disable_indent_lst="module,class,package,eos"
+autocmd filetype verilog_Systemverilog let g:verilog_indent_assign_dix = 1
