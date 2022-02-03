@@ -93,8 +93,8 @@
 	set noshowmode                   	" display the current mode
 
 	set cursorline  				" highlight current line
-	hi cursorline guibg=#333333 	" highlight bg color of current line
-	hi CursorColumn guibg=#333333   " highlight cursor
+	"hi cursorline guibg=#333333 	" highlight bg color of current line
+	"hi CursorColumn guibg=#333333   " highlight cursor
 	set backspace=indent,eol,start	" backspace for dummys
 	set linespace=0					" No extra spaces between rows
 	set nu							" Line numbers on

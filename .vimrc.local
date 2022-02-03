@@ -13,3 +13,10 @@ set cc=100
 "set formatoptions -=ro
 autocmd BufNewFile,BufRead * setlocal formatoptions-=r
 
+highlight Cursor guifg=white guibg=green
+highlight iCursor guifg=white guibg=green
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver25-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait10
+
