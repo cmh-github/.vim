@@ -187,6 +187,7 @@ amenu &TimingWave.Invert<TAB><C-F8>                                     :call In
 
 amenu &AlwaysBlock.always_ff\ @(posedge\ or\ negedge)                   :call AlBpn()<CR>
 amenu &AlwaysBlock.always_comb                                          :call AlB()<CR>
+amenu &AlwaysBlock.fsm                                                  :call AlFsm()<CR>
 " (TODO) It seems the functions below are not needed
 "amenu &AlwaysBlock.always\ @(negedge\ or\ negedge)                      :call AlBnn()<CR>
 "amenu &AlwaysBlock.always\ @(posedge)                                   :call AlBp()<CR>
@@ -851,9 +852,38 @@ function AlB() "{{{2
         call append(lnum,"")
     endfor
     call setline(lnum+1,"always_comb begin")
-    call setline(lnum+2,"    ")
+    call setline(lnum+2,"  ")
     call setline(lnum+3,"end")
     call cursor(lnum+2,5)
+endfunction "}}}2
+
+function AlFsm() "{{{2
+    let lnum = line(".")
+    for idx in range(1,3)
+        call append(lnum,"")
+    endfor
+    call setline(lnum+1,"localparam int StateIdleIdx = 0;")
+    call setline(lnum+2,"localparam int StateBusyIdx = 1;")
+    call setline(lnum+3,"localparam int StateNum = 2;")
+    call setline(lnum+4,"")
+    call setline(lnum+5,"typedef enum logic [StateNum-1:0] {")
+    call setline(lnum+6,"  StateIdle = ((StateNum)'(1'b1) << StateIdleIdx),")
+    call setline(lnum+7,"  StateBusy = ((StateNum)'(1'b1) << StateBusyIdx)")
+    call setline(lnum+8,"} t_xxx_fsm_state;")
+    call setline(lnum+9,"")
+    call setline(lnum+10,"t_xxx_fsm_state xxx_fsm_state;")
+    call setline(lnum+11,"t_xxx_fsm_state xxx_fsm_state_next;")
+    call setline(lnum+12,"logic           xxx_fsm_state_le;")
+    call setline(lnum+13,"always_comb begin")
+    call setline(lnum+14,"  unique case(xxx_fsm_state)")
+    call setline(lnum+15,"    StateIdle: begin")
+    call setline(lnum+16,"      xxx_fsm_state_next = StateBusyIdx;")
+    call setline(lnum+17,"      xxx_fsm_state_le = 1'b1;")
+    call setline(lnum+18,"    end")
+    call setline(lnum+19,"    default:")
+    call setline(lnum+20,"  endcase:")
+    call setline(lnum+21,"end")
+    call cursor(lnum+2,23)
 endfunction "}}}2
 
 function AlBnn() "{{{2
