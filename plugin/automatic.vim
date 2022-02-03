@@ -285,7 +285,7 @@ tmenu ToolBar.alnn       always @(negedge clk or negedge rst_n)
 "Command definition{{{1
 
 command RtlTree                                                         :call RtlTree()
-map <C-J>                                                               :call ShowInst()<ESC>
+"map <C-J>                                                               :call ShowInst()<ESC>
 map <CA-A>                                                              :call ShowCall()<ESC>
 map <CA-N>                                                              :call ShowDef()<ESC>
 map <S-F1>                                                              :call AutoArg()<ESC>
